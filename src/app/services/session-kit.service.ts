@@ -18,7 +18,7 @@ export class SessionService {
     session$!: Observable<W3oSession | null>;
 
     constructor(
-        private w3o : Web3OctopusService, // inject the Web3Octopus instance
+        private w3o: Web3OctopusService, // inject the Web3Octopus instance
     ) {
         logger.method('constructor');
         this.session$ = this.w3o.octopus.sessions.current$;
@@ -63,15 +63,11 @@ export class SessionService {
     }
 
     // Restore session method
+    // Note: autoLogin is now configured in the init() options in web3-octopus.service.ts
     async restoreSession() {
         const context = logger.method('restoreSession');
-        try {
-            this.w3o.octopus.auth.autoLogin(context);
-        } catch (error) {
-            console.error('Error restoring session:', error);
-            throw error;
-        }
-
+        // The octopus will handle auto-login automatically if configured with autoLogin: true
+        context.log('Auto-login is handled by octopus.init() configuration');
     }
 
     validateAccount(address: string): Observable<boolean> {

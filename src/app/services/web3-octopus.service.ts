@@ -18,12 +18,14 @@ import {
     AntelopeTokensService,                // extends W3oService
     AntelopeResourcesService,
     AntelopeChainSupport,
+    AntelopeWalletAnchor,
     TelosZeroNetwork,
     TelosZeroTestnetNetwork,
 } from '@vapaee/w3o-antelope';
 // import the classes to support Ethereum networks
 import {
     EthereumChainSupport,
+    EthereumWalletMetamask,
     EthereumTokensService,
     TelosEVMNetwork,
 } from '@vapaee/w3o-ethereum';
@@ -56,7 +58,9 @@ export class Web3OctopusService implements OnDestroy {
                 // Network type
                 type: 'antelope',
                 // chain support implementation
-                chain: new AntelopeChainSupport(context),
+                chain: new AntelopeChainSupport(context, [
+                    new AntelopeWalletAnchor(context)
+                ]),
                 // list of supported Antelope networks
                 networks: [
                     new TelosZeroNetwork({}, context),
@@ -68,7 +72,10 @@ export class Web3OctopusService implements OnDestroy {
             // ---- Register Telos EVM support ----
             const telosEvmSupportSettings: W3oNetworkSupportSettings = {
                 type: 'ethereum',
-                chain: new EthereumChainSupport(context),
+                chain: new EthereumChainSupport(context, [
+                    // Metamask wallet
+                    new EthereumWalletMetamask(context),
+                ]),
                 networks: [
                     new TelosEVMNetwork({}, context),
                 ]
